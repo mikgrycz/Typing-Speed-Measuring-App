@@ -1,0 +1,135 @@
+#: import Factory kivy.factory.Factory
+<Welcome_screen>:
+ 
+    canvas.before:      
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Image: 
+        source: 'typewriter.jpg'
+        allow_stretch: True
+        keep_ratio: True
+    RoundButton:
+        size_hint: 0.17, 0.10
+        pos_hint: {'right': 0.25, 'top':0.7}
+        text: 'Lets start!'
+        on_press: 
+            root.manager.current = 'main_s'
+        
+    RoundButton:        
+        size_hint: 0.17, 0.10
+        pos_hint: {'right': 0.93, 'top':0.2}    
+        text: 'Quit'
+        on_press: 
+            app.stop()
+
+<Main_screen>:
+    canvas.before:      
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    MDTextField:
+        mode: "rectangle"
+        hint_text: "Type here"
+        helper_text: "once you start typing a timer will start"
+        helper_text_mode: "persistent"
+        id: text_input
+        id_pos: 0
+        size_hint_x: 0.9
+        pos_hint: {'center_x': 0.5, 'top':0.6}
+        size_hint_y: None
+        on_text: root.get_input()
+
+    RstDocument:
+        padding: 25, 25
+        id_pos: 1
+        id: text_output
+        size_hint: 0.9, 0.4
+        pos_hint: {'center_x': 0.5, 'top':0.45}     
+        text: root.text
+    BoxLayout:
+        spacing: 5
+        padding: 5, 5
+        RoundButton:
+            size_hint: 0.27, 0.10
+            padding: 25, 25
+            pos_hint: {'right': 0.4, 'top':0.97}
+            text: 'Back to welcome screen'
+            on_press: root.manager.current = 'welcome_s'
+
+        RoundButton:
+            size_hint: 0.27, 0.10
+            padding: 25, 25
+            pos_hint: {'right': 0.7, 'top':0.97}
+            text: 'Regenerate'
+            on_press: 
+               # app.t = 0
+                text_input.text = ''
+                root.text = root.generate_words() 
+                text_output.text = root.text
+
+        RoundButton:
+            size_hint: 0.27, 0.10
+            padding: 25, 25
+            pos_hint: {'right': 1, 'top':0.97}
+            text: 'Exit'
+            on_press: app.stop()
+
+    Label:
+        size_hint: 0.05, 0.05
+        color: 0.5, 0.5, 0.5, 1
+        id: timer
+        font_size: 30
+        bold: True
+        padding: 25, 25
+        pos_hint: {'right': 0.525, 'top':0.77}
+        text:'Time: ' + str(60)
+
+<Popup_screen>:
+    canvas.before:      
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        spacing: 5
+        padding: 5, 5
+        RoundButton:
+            size_hint: 1, 0.10
+            padding: 25, 25
+            pos_hint: {'right': 0.5, 'top':0.97}
+            text: 'Back to main screen'
+            on_press: root.manager.current = 'main_s'
+    Label:
+        size_hint: 0.05, 0.05
+        color: 0.5, 0.5, 0.5, 1
+        id: results
+        font_size: 30
+        bold: True
+        padding: 25, 25
+        pos_hint: {'right': 0.525, 'top':0.77}
+        text: root.get_results()
+
+    RstDocument:
+       #s on_show: root.get_score()
+        padding: 25, 25
+        id_pos: 1
+        id: text_output
+        size_hint: 0.9, 0.8
+        pos_hint: {'center_x': 0.5, 'top':0.65} 
+        text: root.get_score()    
+<RoundButton@Button>:
+    background_color: 0,0,0,0
+    background_normal: ''
+    canvas.before:
+        Color:
+            rgba: 0.15, 0.15, 0.15, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size 
+            radius: [18]        
